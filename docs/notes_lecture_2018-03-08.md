@@ -19,14 +19,34 @@
 
     - OBIA
     - Tweet clusters
+ 
+## Input 
 
-## Output
+    - Time seris of sets of multipolygons
+    -> One rectangular object
+
+## Result
 
     - Where is object A (t + dt)?
     - What was the change of support A (t) -> A (t + dt)?
 
+## Output 
+    
+    -labelled multipolygons
+    - extra CoS column
+    - Hierarichal CoS?
+    - Encoding CoS
+   
+## Process
+    
+    -Machine Learning 
+
+## Meta-Task
+
+- Find examples of Vector input to ML
+
 # To do
 
-    - Install Rstudio
-    - Set up package in github/zgis
+    ~~- Install Rstudio~~
+    ~~- Set up package in github/zgis~~
     - Machine learning for this problem?
