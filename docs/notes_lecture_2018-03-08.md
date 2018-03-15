@@ -47,6 +47,6 @@
 
 # To do
 
-    ~~- Install Rstudio~~
-    ~~- Set up package in github/zgis~~
-    - Machine learning for this problem?
+~~Install Rstudio~~
+~~Set up package in github/zgis~~
+Machine learning for this problem?
