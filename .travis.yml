@@ -9,16 +9,16 @@ matrix:
         - os: linux
           r: release
           env: R_CODECOV=true
-        - os: linux
-          r: devel
-          dist: trusty
+          #- os: linux
+          #r: devel
+          #dist: trusty
         - os: linux
           r: oldrel
           dist: trusty
         - os: osx
           r: release
-        - os: osx
-          r: devel
+          #- os: osx
+          #r: devel
 
 r_packages:
       - covr
