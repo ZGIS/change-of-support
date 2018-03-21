@@ -9,3 +9,9 @@ matrix:
         - os: linux
           r: release
           env: R_CODECOV=true
+
+r_packages:
+      - covr
+
+after_success:
+      - Rscript -e 'library(covr); codecov()'
