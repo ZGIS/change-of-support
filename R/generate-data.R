@@ -10,8 +10,8 @@
 generate_data <- function (layers = 10)
 {
     n_pts <- 500
-    eps <- 0.05
     change_rate <- 0.05
+    n_clusters <- 20
 
     xy <- matrix (runif (2 * n_pts), ncol = 2)
     n_change <- as.integer (change_rate * n_pts)
@@ -19,19 +19,18 @@ generate_data <- function (layers = 10)
 
     for (i in seq_len (layers))
     {
-        xy [sample (1:n_pts, n_change), ] <- runif (2 * n_change, min = -0.1,
-                                                    max = 0.1)
-        dat [[i]] <- generate_data_layer (xy, eps)
-        generate_data_layer (xy, eps)
+        xy_rand <- xy
+        xy_rand [sample (1:n_pts, n_change), ] <- runif (2 * n_change,
+                                                         min = -0.1, max = 0.1)
+        dat [[i]] <- generate_data_layer (xy_rand, n_clusters)
     }
     dat
 }
 
-generate_data_layer <- function (xy, eps)
+generate_data_layer <- function (xy, n_clusters)
 {
-    clust <- dbscan::optics (xy, eps = eps, minPts = 3)
-    optics_cluster <- dbscan::extractDBSCAN (clust, eps)
-    c_ids <- optics_cluster$cluster
+    kmeans_cluster <- kmeans (xy, n_clusters)
+    c_ids <- kmeans_cluster$cluster
     layer <- data.frame (xy, c_ids)
     names (layer) <- c ("x", "y", "cluster")
     unique_clusters <- unique (sort (layer$cluster))
