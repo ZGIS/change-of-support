@@ -42,8 +42,8 @@ generate_data <- function (layers = 50, n_objects = 20, change_rate = 0.05)
 
 generate_data_layer <- function (xy, n_clusters)
 {
-    kmeans_cluster <- kmeans (xy, n_clusters)
-    c_ids <- kmeans_cluster$cluster
+    h_cluster <- hclust (dist (xy))
+    c_ids <- cutree (h_cluster, n_clusters)
     layer <- data.frame (xy, c_ids)
     names (layer) <- c ("x", "y", "cluster")
     unique_clusters <- unique (sort (layer$cluster))
