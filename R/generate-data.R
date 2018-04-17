@@ -3,15 +3,22 @@
 #' This function can be used to generate randomised test data.
 #'
 #' @param layers Desired number of output layers.
+#' @param n_objects Desired number of objects per layer.
+#' @param change_rate The rate of randomness introduced to each new layer.
 #'
 #' @return A list of \code{sf} polygons.
 #'
 #' @export
-generate_data <- function (layers = 10)
+generate_data <- function (layers = 50, n_objects = 20, change_rate = 0.05)
 {
-    n_pts <- 500
-    change_rate <- 0.05
-    n_clusters <- 20
+    if (layers < 1)
+        stop ("layers has to be >= 1")
+    if (n_objects < 2)
+        stop ("n_objects has to be > 1")
+    if (change_rate < 0 || change_rate > 1)
+        stop ("change_rate has to be between 0 and 1.")
+
+    n_pts <- n_objects * max (layers, 20)
 
     xy <- matrix (runif (2 * n_pts), ncol = 2)
     n_change <- as.integer (change_rate * n_pts)
@@ -20,9 +27,15 @@ generate_data <- function (layers = 10)
     for (i in seq_len (layers))
     {
         xy_rand <- xy
-        xy_rand [sample (1:n_pts, n_change), ] <- runif (2 * n_change,
-                                                         min = -0.1, max = 0.1)
-        dat [[i]] <- generate_data_layer (xy_rand, n_clusters)
+        change_ids <- sample (1:n_pts, n_change)
+        change_coords <- xy [change_ids, ]
+        add_to_coords <- runif (2 * n_change, min = -0.1, max = 0.1)
+        change_coords <- change_coords + add_to_coords
+        change_coords [change_coords > 1] <- 1
+        change_coords [change_coords < 0] <- 0
+        xy_rand [change_ids, ] <- change_coords
+
+        dat [[i]] <- generate_data_layer (xy_rand, n_objects)
     }
     dat
 }
