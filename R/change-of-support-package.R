@@ -4,6 +4,7 @@
 #' @docType package
 #' @importFrom grDevices chull
 #' @importFrom alphahull ashape
+#' @importFrom igraph graph.data.frame
 #' @importFrom sf st_polygon st_sfc
 #' @importFrom stats cutree dist hclust runif
 NULL
