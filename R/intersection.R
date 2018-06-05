@@ -23,6 +23,10 @@ intersections <- function (l1, l2)
         rel_matrix [i, ] <- insert
     }
 
+    rel_matrix <- data.frame (rel_matrix)
+    cnames <- paste0 ("intersection", 1:ncol (rel_matrix))
+    colnames (rel_matrix) <- cnames
     intersections <- data.frame (l1, rel_matrix)
+
     return (intersections)
 }
