@@ -80,7 +80,6 @@ getAngle <- function(c1, c2)
 
 MBR <- function(points)
 {
-    points <- coords
     points <- unique (points)
     a <- alphahull::ashape(points, alpha=1000)      # One way to get a convex hull...
     e <- a$edges[, 5:6] - a$edges[, 3:4]            # Edge directions
