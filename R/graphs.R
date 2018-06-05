@@ -29,11 +29,11 @@ get_graph <- function (ts_dat)
         orientation_i <- sapply (l1, getOrientation)
         name_i <- paste (as.character (i), seq_along (l1), sep = ".")
 
-        area [[i]] <- rep (area_i, fromvertices)
-        perimeter [[i]] <- rep (perimeter_i, fromvertices)
-        compactness [[i]] <- rep (compactness_i, fromvertices)
-        orientation [[i]] <- rep (orientation_i, fromvertices)
-        name [[i]] <- rep (name_i, fromvertices)
+        area [[i]] <- area_i
+        perimeter [[i]] <- perimeter_i
+        compactness [[i]] <- compactness_i
+        orientation [[i]] <- orientation_i
+        name [[i]] <- name_i
     }
 
     for (i in seq_len (length (ts_dat) - 1))
@@ -44,8 +44,16 @@ get_graph <- function (ts_dat)
         rel <- intersections (l1, l2)
         intersection_cols <- which (grepl ("intersection[0-9]", colnames (rel)))
         ints <- as.matrix (rel [, intersection_cols])
-        fromvertices <- apply (ifelse (is.na (ints), 0, 1), 1, sum)
-        from <- rep (as.integer (names (fromvertices)), fromvertices)
+        if (ncol (ints) > 1)
+        {
+            fromvertices <- apply (ifelse (is.na (ints), 0, 1), 1, sum)
+            from <- rep (as.integer (names (fromvertices)), fromvertices)
+            from <- rep (as.integer (names (fromvertices)), fromvertices)
+        } else
+        {
+            from <- as.vector (ints)
+        }
+
 
         to <- as.vector (t (ints))
         to <- to [!is.na (to)]
