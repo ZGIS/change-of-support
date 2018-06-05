@@ -10,7 +10,7 @@
 #' @export
 intersections <- function (l1, l2)
 {
-    rel <- sf::st_relate (l1, l2, pattern = "2********") 
+    rel <- suppressMessages (sf::st_relate (l1, l2, pattern = "2********"))
     maxintersections <- max (sapply (rel, length))
     rel_matrix <- matrix (nrow = nrow (rel), ncol = maxintersections)
 
