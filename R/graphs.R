@@ -12,9 +12,11 @@ get_graph <- function (ts_dat)
 {
     graph_from <- vector ("list", length (ts_dat) - 1)
     graph_to <- vector ("list", length (ts_dat) - 1)
+    overlap <- vector ("list", length (ts_dat) - 1)
 
     name <- vector ("list", length (ts_dat))
     area <- vector ("list", length (ts_dat))
+    all_areas <- vector ("list", length (ts_dat))
     perimeter <- vector ("list", length (ts_dat))
     compactness <- vector ("list", length (ts_dat))
     orientation <- vector ("list", length (ts_dat))
@@ -48,19 +50,22 @@ get_graph <- function (ts_dat)
         {
             fromvertices <- apply (ifelse (is.na (ints), 0, 1), 1, sum)
             from <- rep (as.integer (names (fromvertices)), fromvertices)
-            from <- rep (as.integer (names (fromvertices)), fromvertices)
+            all_areas [[i]] <- rep (area [[i]], fromvertices)
         } else
         {
             from <- as.vector (ints)
         }
 
-
         to <- as.vector (t (ints))
         to <- to [!is.na (to)]
-        from <- paste (as.character (i), sep = ".", from)
-        to <- paste (as.character (i + 1), sep = ".", to)
-        graph_from [[i]] <- from
-        graph_to [[i]] <- to
+        from_name <- paste (as.character (i), sep = ".", from)
+        to_name <- paste (as.character (i + 1), sep = ".", to)
+
+        area_overlap <- as.numeric (getArea (st_intersection (l1, l2)))
+        area_overlap <- area_overlap [area_overlap > 0]
+        overlap [[i]] <- area_overlap / all_areas [[i]]
+        graph_from [[i]] <- from_name
+        graph_to [[i]] <- to_name
     }
 
     vert <- data.frame (name = unlist (name),
@@ -69,7 +74,23 @@ get_graph <- function (ts_dat)
                         compactness = unlist (compactness),
                         orientation = unlist (orientation))
     vert <- unique (vert)
-    relations <- data.frame(from = unlist (graph_from), to = unlist (graph_to))
-    g <- graph.data.frame(relations, directed = TRUE, vertices = vert)
+    relations <- data.frame(from = unlist (graph_from), to = unlist (graph_to),
+                            overlap = unlist (overlap))
+    g <- graph.data.frame (relations, directed = TRUE, vertices = vert)
     return (g)
+}
+
+#' Qualitative change of support
+#'
+#' Calculate the qualitative change of suppot that connected nodes in a graph
+#' undergo. The support can be one of the following: stable, split, merge,
+#' anihilation, creation.
+#'
+#' @param dat \code{igraph} object representing all objects and layers.
+#'
+#' @return Map of qualitative COS
+#'
+#' @export
+qualitative_cos <- function (dat)
+{
 }
